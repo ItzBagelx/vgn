@@ -1,36 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuroMart - Enhanced Commerce</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">NEUROMART</div>
-        <div>
-            <button class="btn" onclick="toggleCart()">
-                Cart (<span id="cartCount">0</span>)
-            </button>
-        </div>
-    </nav>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-    <main class="product-grid" id="products"></main>
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-    <div class="cart-panel" id="cartPanel">
-        <h2 class="neon-glow">Active Transaction</h2>
-        <div id="cartItems"></div>
-        <button class="btn" onclick="checkout()" style="margin-top: 2rem;">
-            ENCRYPTED CHECKOUT
-        </button>
-        <div style="margin-top: 2rem; color: var(--neon-green);">
-            <p>PGP Key: 1A2B3C4D5E6F</p>
-            <p>⛓ Blockchain Verified</p>
-            <p>🔒 E2E Encryption</p>
-        </div>
-    </div>
+let balance = 1000;
+let currentBet = 0;
 
-    <script src="script.js"></script>
-</body>
-</html>
+// Update leaderboard
+function updateLeaderboard() {
+  const leaderboardRef = database.ref('leaderboard');
+  leaderboardRef.orderByChild('score').limitToLast(10).on('value', (snapshot) => {
+    const scores = [];
+    snapshot.forEach((child) => {
+      scores.push(child.val());
+    });
+    const sorted = scores.sort((a, b) => b.score - a.score);
+    document.getElementById('leaderboard').innerHTML = sorted
+      .map((user, index) => `${index + 1}. ${user.name}: ${user.score}`)
+      .join('<br>');
+  });
+}
+
+// Save score to Firebase
+function saveScore(name, score) {
+  const leaderboardRef = database.ref('leaderboard').push();
+  leaderboardRef.set({ name, score });
+}
+
+// Coin flip logic
+function flip(guess) {
+  currentBet = parseInt(document.getElementById('betAmount').value);
+  if (currentBet > balance || currentBet < 10) {
+    alert("Invalid bet!");
+    return;
+  }
+
+  const result = Math.random() < 0.5 ? 'heads' : 'tails';
+  const resultElement = document.getElementById('result');
+
+  if (guess === result) {
+    balance += currentBet;
+    resultElement.innerHTML = `🎉 You won ${currentBet} points! (It was ${result})`;
+  } else {
+    balance -= currentBet;
+    resultElement.innerHTML = `💸 You lost ${currentBet} points... (It was ${result})`;
+  }
+
+  document.getElementById('balance').textContent = balance;
+
+  // Prompt for leaderboard name when balance is 0 or user quits
+  if (balance <= 0) {
+    const name = prompt("Game over! Enter your name for the leaderboard:");
+    if (name) saveScore(name, balance);
+    balance = 1000; // Reset balance
+  }
+}
+
+// Initialize leaderboard
+updateLeaderboard();
