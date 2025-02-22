@@ -10,7 +10,68 @@
             --neon-purple: #bc13fe;
             --dark-bg: #0a0a0f;
         }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Same style as before -->
+    <style>
+        .crypto-transfer {
+            border: 2px solid #ff00ff;
+            padding: 2rem;
+            margin: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+        }
 
+        .crypto-input {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 1rem;
+            margin: 1rem 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NEURAL TRANSFER PROTOCOL</h1>
+    </div>
+
+    <div class="crypto-transfer">
+        <h2>QUANTUM SETTLEMENT</h2>
+        <input type="text" class="crypto-input" placeholder="NEURAL WALLET ID">
+        <input type="text" class="crypto-input" placeholder="BIO-SIGNATURE KEY">
+        <input type="text" class="crypto-input" placeholder="NEURAL SCAN CODE">
+        
+        <button class="add-to-cart" 
+                style="margin-top: 2rem;"
+                onclick="initiateTransfer()">
+            EXECUTE DARK TRANSACTION
+        </button>
+
+        <div id="blockchainConfirm" style="display: none;">
+            <p>CONFIRMING ON CHAIN... <span id="blocks">0</span>/12</p>
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        function initiateTransfer() {
+            document.getElementById('blockchainConfirm').style.display = 'block';
+            let blocks = 0;
+            const interval = setInterval(() => {
+                blocks++;
+                document.getElementById('blocks').textContent = blocks;
+                if(blocks >= 12) {
+                    clearInterval(interval);
+                    alert('[GAME] Transaction complete\nNeural delivery initiated');
+                    window.location.href = 'index.html';
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>
         body {
             background: var(--dark-bg);
             color: white;
