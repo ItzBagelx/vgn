@@ -93,6 +93,13 @@
 
     <script>
         let cartItems = 0;
+        // Add to existing script in index.html
+document.querySelector('.cart-counter').addEventListener('click', () => {
+    localStorage.setItem('cartCount', cartItems);
+    window.location.href = 'checkout.html';
+});
+
+        
         document.querySelectorAll('.add-to-cart').forEach(button => {
             button.addEventListener('click', () => {
                 cartItems++;
