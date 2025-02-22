@@ -3,144 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Meter</title>
+    <title>Odyssey | Energy Crystals</title>
     <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --dark-bg: #0a0a0f;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #f0f2f5;
-        }
-
-        .container {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 5vh;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
-        }
-
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 2rem;
-            font-size: 2.5em;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        #searchInput {
-            padding: 12px 20px;
-            font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            width: 70%;
-            max-width: 400px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        #searchInput:focus {
-            border-color: #3498db;
-        }
-
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            background: #3498db;
+            background: var(--dark-bg);
             color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
         }
 
-        button:hover {
-            background: #2980b9;
-        }
-
-        #auraResult {
-            margin-top: 2rem;
+        .header {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
             padding: 2rem;
-            background: #f8f9fa;
-            border-radius: 15px;
-            display: none;
+            text-align: center;
+            border-bottom: 3px solid var(--neon-blue);
         }
 
-        .aura-value {
-            font-size: 3em;
-            color: #2ecc71;
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        .add-to-cart {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
             font-weight: bold;
-            margin: 1rem 0;
+            border-radius: 4px;
         }
 
-        .aura-text {
-            color: #7f8c8d;
-            font-size: 1.1em;
+        .cart-counter {
+            position: fixed;
+            top: 1rem;
+            right: 2rem;
+            background: var(--neon-purple);
+            padding: 1rem;
+            border-radius: 50%;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🔮 Aura Meter</h1>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Enter an item to measure its aura...">
-            <button onclick="calculateAura()">Measure</button>
+    <div class="header">
+        <h1>ODYSSEY</h1>
+        <p>Premium Energy Crystals ⚡</p>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <h3>Quantum Core</h3>
+            <p>999 credits</p>
+            <button class="add-to-cart">Add to Cart</button>
         </div>
-        <div id="auraResult">
-            <div class="aura-value" id="auraValue">0%</div>
-            <div class="aura-text" id="auraText">Aura purity level</div>
+        <div class="product-card">
+            <h3>Neon Shard</h3>
+            <p>750 credits</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <h3>Photon Matrix</h3>
+            <p>1200 credits</p>
+            <button class="add-to-cart">Add to Cart</button>
         </div>
     </div>
 
+    <div class="cart-counter">🛒 <span id="cartCount">0</span></div>
+
     <script>
-        function calculateAura() {
-            const item = document.getElementById('searchInput').value;
-            const resultDiv = document.getElementById('auraResult');
-            const auraValue = document.getElementById('auraValue');
-            const auraText = document.getElementById('auraText');
-
-            if (!item) {
-                alert('Please enter an item to measure');
-                return;
-            }
-
-            // Generate random aura value between 1-100
-            const value = Math.floor(Math.random() * 100) + 1;
-            
-            // Display results
-            resultDiv.style.display = 'block';
-            auraValue.textContent = `${value}%`;
-            
-            // Different messages based on value
-            if (value < 33) {
-                auraText.textContent = "Needs cleansing - negative energy detected";
-                auraValue.style.color = "#e74c3c";
-            } else if (value < 66) {
-                auraText.textContent = "Moderate aura - some impurities present";
-                auraValue.style.color = "#f1c40f";
-            } else {
-                auraText.textContent = "Pure aura - positive energy flowing!";
-                auraValue.style.color = "#2ecc71";
-            }
-        }
-
-        // Allow Enter key to trigger search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculateAura();
-            }
+        let cartItems = 0;
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                cartItems++;
+                document.getElementById('cartCount').textContent = cartItems;
+                button.textContent = "Added!";
+                setTimeout(() => {
+                    button.textContent = "Add to Cart";
+                }, 1000);
+            });
         });
     </script>
 </body>
