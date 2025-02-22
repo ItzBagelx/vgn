@@ -3,111 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Odyssey | Energy Crystals</title>
+    <title>ODYSSEY // Neural Marketplace</title>
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #bc13fe;
-            --dark-bg: #0a0a0f;
+            --neon-pink: #ff00ff;
+            --matrix-green: #00ff00;
+            --hacker-bg: #000;
+            --scanline: rgba(0, 255, 0, 0.1);
         }
 
         body {
-            background: var(--dark-bg);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
+            background: var(--hacker-bg);
+            color: var(--matrix-green);
+            font-family: 'Courier New', monospace;
             margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* CRT screen effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                var(--scanline) 0px,
+                var(--scanline) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
         }
 
         .header {
-            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
-            padding: 2rem;
+            border-bottom: 3px solid var(--neon-pink);
+            padding: 1.5rem;
             text-align: center;
-            border-bottom: 3px solid var(--neon-blue);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px var(--neon-pink);
+            margin: 0;
+            animation: glitch 2s infinite;
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 3rem;
+            padding: 2rem;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--neon-purple);
-            border-radius: 8px;
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid var(--matrix-green);
             padding: 1.5rem;
-            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 15px var(--neon-purple);
+        .product-card::before {
+            content: "ENCRYPTED";
+            position: absolute;
+            rotate: -45deg;
+            left: -30px;
+            top: 15px;
+            color: var(--neon-pink);
+            font-size: 0.8rem;
+        }
+
+        .crypto-price {
+            color: var(--neon-pink);
+            font-size: 1.2rem;
+            margin: 1rem 0;
         }
 
         .add-to-cart {
-            background: var(--neon-blue);
-            color: var(--dark-bg);
-            border: none;
-            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 0.8rem;
             cursor: pointer;
-            font-weight: bold;
-            border-radius: 4px;
+            width: 100%;
+            transition: 0.3s;
         }
 
-        .cart-counter {
-            position: fixed;
-            top: 1rem;
-            right: 2rem;
-            background: var(--neon-purple);
-            padding: 1rem;
-            border-radius: 50%;
+        .add-to-cart:hover {
+            background: var(--matrix-green);
+            color: var(--hacker-bg);
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>ODYSSEY</h1>
-        <p>Premium Energy Crystals ⚡</p>
+        <h1>𐊏𐊇𐊂𐊇𐊇𐊒𐊗𐊒 // ODYSSEY</h1>
+        <p>NEURAL MARKETPLACE v4.2.0</p>
     </div>
 
     <div class="product-grid">
         <div class="product-card">
-            <h3>Quantum Core</h3>
-            <p>999 credits</p>
-            <button class="add-to-cart">Add to Cart</button>
+            <h3>NEURAL FRACTAL v9.5</h3>
+            <p>Perception Amplification Module</p>
+            <div class="crypto-price">0.042 ΞTH</div>
+            <button class="add-to-cart">DECRYPT & ADD TO CART</button>
         </div>
+        
         <div class="product-card">
-            <h3>Neon Shard</h3>
-            <p>750 credits</p>
-            <button class="add-to-cart">Add to Cart</button>
+            <h3>PENJA-MINES v3.0</h3>
+            <p>Subdermal Nano-Mist System</p>
+            <div class="crypto-price">0.028 ΞTH</div>
+            <button class="add-to-cart">DECRYPT & ADD TO CART</button>
         </div>
+
         <div class="product-card">
-            <h3>Photon Matrix</h3>
-            <p>1200 credits</p>
-            <button class="add-to-cart">Add to Cart</button>
+            <h3>NEURO-SHUNT vX</h3>
+            <p>Cognitive Optimization Serum</p>
+            <div class="crypto-price">0.035 ΞTH</div>
+            <button class="add-to-cart">DECRYPT & ADD TO CART</button>
         </div>
     </div>
 
-    <div class="cart-counter">🛒 <span id="cartCount">0</span></div>
-
     <script>
-        let cartItems = 0;
-        // Add to existing script in index.html
-document.querySelector('.cart-counter').addEventListener('click', () => {
-    localStorage.setItem('cartCount', cartItems);
-    window.location.href = 'checkout.html';
-});
+        // Fake blockchain verification
+        class GameBlockchain {
+            constructor() {
+                this.cart = [];
+                this.walletConnected = false;
+            }
 
-        
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', () => {
-                cartItems++;
-                document.getElementById('cartCount').textContent = cartItems;
-                button.textContent = "Added!";
-                setTimeout(() => {
-                    button.textContent = "Add to Cart";
-                }, 1000);
+            fakeConnect() {
+                this.walletConnected = true;
+                alert('[GAME] Neural wallet connected\nBalance: 3.142 ΞTH');
+            }
+        }
+
+        const blockchain = new GameBlockchain();
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!blockchain.walletConnected) {
+                    blockchain.fakeConnect();
+                } else {
+                    btn.textContent = 'ENCRYPTING...';
+                    setTimeout(() => {
+                        btn.textContent = 'ADDED TO NEURAL CART';
+                        setTimeout(() => {
+                            btn.textContent = 'DECRYPT & ADD TO CART';
+                        }, 2000);
+                    }, 1000);
+                }
             });
         });
     </script>
